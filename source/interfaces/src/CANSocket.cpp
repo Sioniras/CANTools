@@ -23,6 +23,7 @@ CAN::Interfaces::CANSocket::CANSocket() :
 	_socket(0),
 	_interfaceName("any"),
 	_interfaceIndex(0),
+	_pollTimeout(200),
 	_blocking(true)
 {
 }
@@ -106,6 +107,12 @@ bool CAN::Interfaces::CANSocket::Connect(const std::string& interfaceName)
 	return false;
 }
 
+// Sets the timeout used for reading from the socket
+void CAN::Interfaces::CANSocket::SetTimeout(int timeout)
+{
+	_pollTimeout = timeout;
+}
+
 // Sets the socket into blocking or non-blocking mode
 void CAN::Interfaces::CANSocket::SetBlockingMode(bool blocking)
 {
@@ -171,7 +178,7 @@ bool CAN::Interfaces::CANSocket::RequestMessage(CAN::Message& message)
 		return false;
 
 	// If the socket is not in blocking mode, poll the socket to see if data is available
-	if(!_blocking && !PollSocket(5000))
+	if(!_blocking && !PollSocket(_pollTimeout))
 		return false;
 
 	// Get message reference
