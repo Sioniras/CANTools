@@ -33,7 +33,6 @@ set(SOURCES_CAN_UTILITY
 
 	# CANOpen protocol
 	source/can/include/canopen.h
-	source/can/src/canopen.cpp
 )
 
 # -------------------------------------------------
