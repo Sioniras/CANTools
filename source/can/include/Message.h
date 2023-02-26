@@ -9,7 +9,7 @@
 #include <linux/can.h>	// can_frame definition
 #include <cstdint>	// uintX_t definitions
 
-namespace CAN
+namespace can
 {
 	class Message
 	{

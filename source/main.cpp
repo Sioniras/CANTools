@@ -10,7 +10,7 @@ sudo ifconfig vcan0 up
 
 int main()
 {
-	auto interface = std::make_unique<CAN::Interfaces::CANSocket>();
+	auto interface = std::make_unique<can::interfaces::CANSocket>();
 	interface->Connect("vcan0");
 	interface->SetBlockingMode(false);
 	can_frame frame;
@@ -20,7 +20,7 @@ int main()
 	frame.data[2] = 0xBE;
 	frame.data[3] = 0xEF;
 	frame.len = 4;
-	CAN::Message msg(frame);
+	can::Message msg(frame);
 	interface->SendMessage(msg);
 
 	bool status = interface->RequestMessage(msg);

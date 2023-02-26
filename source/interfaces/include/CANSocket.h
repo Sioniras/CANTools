@@ -12,7 +12,7 @@
 
 #include <interfaces/include/ICANInterface.h>
 
-namespace CAN::Interfaces
+namespace can::interfaces
 {
 	class CANSocket : public ICANInterface
 	{
@@ -32,14 +32,14 @@ namespace CAN::Interfaces
 
 			// Public methods
 			bool Connect(const std::string& interfaceName);
+			void Disconnect();
 			void SetTimeout(int timeout);
 			void SetBlockingMode(bool blocking);
 			constexpr bool IsReady() const;
 			constexpr bool InterfaceIsAny() const;
 
 			// ICANInterface interface
-			void Disconnect() override;
-			bool SendMessage(const CAN::Message &message) override;
-			bool RequestMessage(CAN::Message &message) override;
+			bool SendMessage(const can::Message &message) override;
+			bool RequestMessage(can::Message &message) override;
 	};
 }

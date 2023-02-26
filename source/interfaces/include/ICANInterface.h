@@ -5,14 +5,13 @@
 
 #include <can/include/Message.h>
 
-namespace CAN::Interfaces
+namespace can::interfaces
 {
 	class ICANInterface
 	{
 		public:
-			virtual void Disconnect() = 0;
-			virtual bool SendMessage(const CAN::Message& message) = 0;
-			virtual bool RequestMessage(CAN::Message& message) = 0;
+			virtual bool SendMessage(const can::Message& message) = 0;
+			virtual bool RequestMessage(can::Message& message) = 0;
 
 			virtual ~ICANInterface() {}
 	};

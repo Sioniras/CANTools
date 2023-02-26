@@ -19,7 +19,7 @@
 // Constructors / destructor
 // --------------------------------------------------------------------
 // Constructor
-CAN::Interfaces::CANSocket::CANSocket() :
+can::interfaces::CANSocket::CANSocket() :
 	_socket(0),
 	_interfaceName("any"),
 	_interfaceIndex(0),
@@ -29,7 +29,7 @@ CAN::Interfaces::CANSocket::CANSocket() :
 }
 
 // Destructor
-CAN::Interfaces::CANSocket::~CANSocket()
+can::interfaces::CANSocket::~CANSocket()
 {
 	Disconnect();
 }
@@ -38,7 +38,7 @@ CAN::Interfaces::CANSocket::~CANSocket()
 // Private methods
 // --------------------------------------------------------------------
 // Uses the poll function to check whether any data is available on the socket
-bool CAN::Interfaces::CANSocket::PollSocket(int timeout)
+bool can::interfaces::CANSocket::PollSocket(int timeout)
 {
 	// Setup the polling data structure
 	pollfd p;
@@ -59,7 +59,7 @@ bool CAN::Interfaces::CANSocket::PollSocket(int timeout)
 // Public methods
 // --------------------------------------------------------------------
 // Connect method, based on: https://www.kernel.org/doc/html/v5.11/networking/can.html
-bool CAN::Interfaces::CANSocket::Connect(const std::string& interfaceName)
+bool can::interfaces::CANSocket::Connect(const std::string& interfaceName)
 {
 	// Check whether a connection is already active
 	if(_socket > 0)
@@ -107,38 +107,8 @@ bool CAN::Interfaces::CANSocket::Connect(const std::string& interfaceName)
 	return false;
 }
 
-// Sets the timeout used for reading from the socket
-void CAN::Interfaces::CANSocket::SetTimeout(int timeout)
-{
-	_pollTimeout = timeout;
-}
-
-// Sets the socket into blocking or non-blocking mode
-void CAN::Interfaces::CANSocket::SetBlockingMode(bool blocking)
-{
-	int flags = fcntl(_socket, F_GETFL, 0);
-	flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
-	fcntl(_socket, F_SETFL, flags);
-	_blocking = blocking;
-}
-
-// Checks whether the CAN socket is open and valid
-constexpr bool CAN::Interfaces::CANSocket::IsReady() const
-{
-	return (_socket > 0);
-}
-
-// Checks whether the interface index is set to "any"
-constexpr bool CAN::Interfaces::CANSocket::InterfaceIsAny() const
-{
-	return (_interfaceIndex == 0);
-}
-
-// --------------------------------------------------------------------
-// ICANInterface interface
-// --------------------------------------------------------------------
 // Disconnect method
-void CAN::Interfaces::CANSocket::Disconnect()
+void can::interfaces::CANSocket::Disconnect()
 {
 	// Check whether the socket is open
 	if(_socket > 0)
@@ -149,8 +119,38 @@ void CAN::Interfaces::CANSocket::Disconnect()
 	}
 }
 
+// Sets the timeout used for reading from the socket
+void can::interfaces::CANSocket::SetTimeout(int timeout)
+{
+	_pollTimeout = timeout;
+}
+
+// Sets the socket into blocking or non-blocking mode
+void can::interfaces::CANSocket::SetBlockingMode(bool blocking)
+{
+	int flags = fcntl(_socket, F_GETFL, 0);
+	flags = blocking ? (flags & ~O_NONBLOCK) : (flags | O_NONBLOCK);
+	fcntl(_socket, F_SETFL, flags);
+	_blocking = blocking;
+}
+
+// Checks whether the CAN socket is open and valid
+constexpr bool can::interfaces::CANSocket::IsReady() const
+{
+	return (_socket > 0);
+}
+
+// Checks whether the interface index is set to "any"
+constexpr bool can::interfaces::CANSocket::InterfaceIsAny() const
+{
+	return (_interfaceIndex == 0);
+}
+
+// --------------------------------------------------------------------
+// ICANInterface interface
+// --------------------------------------------------------------------
 // Attempt to send a message
-bool CAN::Interfaces::CANSocket::SendMessage(const CAN::Message& message)
+bool can::interfaces::CANSocket::SendMessage(const can::Message& message)
 {
 	// Ensure that the socket is connected
 	if(!IsReady())
@@ -171,7 +171,7 @@ bool CAN::Interfaces::CANSocket::SendMessage(const CAN::Message& message)
 }
 
 // Requests a message from the CAN bus
-bool CAN::Interfaces::CANSocket::RequestMessage(CAN::Message& message)
+bool can::interfaces::CANSocket::RequestMessage(can::Message& message)
 {
 	// Ensure that the socket is connected
 	if(!IsReady())
