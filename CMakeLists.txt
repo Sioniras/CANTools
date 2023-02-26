@@ -54,6 +54,7 @@ set(SOURCES_TARGET_CANTOOL
 set(SOURCES_TARGET_TESTS
 	tests/test_main.cpp
 	tests/canopen/canopen_tests.cpp
+	tests/connection_factory/connection_factory_tests.cpp
 )
 
 # -------------------------------------------------
