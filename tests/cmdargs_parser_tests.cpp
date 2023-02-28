@@ -25,21 +25,25 @@ class cmdargs_parser
 		};
 
 	public:
-		cmdargs_parser(int argc, const char** argv)
+		cmdargs_parser(int argc, const char** argv) : _valid(false), _values()
 		{
+			auto isOK = true;
 			for(int i = 0; i < argc; i++)
 			{
 				if(std::string(argv[i]).compare("--input") == 0)
 				{
-					if(i+2 < argc) _values[values::input_interface_name] = argv[i+2];
+					if(i+1 >= argc) isOK = false;
+					else if(i+2 < argc) _values[values::input_interface_name] = argv[i+2];
 					i += 2;
 				}
 				else if(std::string(argv[i]).compare("--output") == 0)
 				{
-					if(i+2 < argc) _values[values::output_interface_name] = argv[i+2];
+					if(i+1 >= argc) isOK = false;
+					else if(i+2 < argc) _values[values::output_interface_name] = argv[i+2];
 					i += 2;
 				}
 			}
+			_valid = isOK;
 		}
 
 		std::string get(values parameter)
@@ -60,9 +64,10 @@ class cmdargs_parser
 
 			return "can";
 		}
-		bool valid() const { return true; }
+		bool valid() const { return _valid; }
 
 	private:
+		bool _valid;
 		std::map<values,std::string> _values;
 };
 
@@ -87,6 +92,15 @@ TEST(cmdargs_parser, specify_input_interface_with_default_name)
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_type).c_str(), input.c_str());
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_name).c_str(), interface_name.c_str());
 	EXPECT_TRUE(parser.valid());
+}
+
+TEST(cmdargs_parser, require_input_interface_type_after_keyword)
+{
+	const int argc = 2;
+	const char* argv[argc] { "cantool", "--input" };
+	cmdargs_parser parser{ argc, argv };
+
+	EXPECT_FALSE(parser.valid());
 }
 
 // When no input interface is specified, use the default
@@ -141,6 +155,15 @@ TEST(cmdargs_parser, specify_output_interface_with_default_name)
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_type).c_str(), output.c_str());
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_name).c_str(), interface_name.c_str());
 	EXPECT_TRUE(parser.valid());
+}
+
+TEST(cmdargs_parser, require_output_interface_type_after_keyword)
+{
+	const int argc = 2;
+	const char* argv[argc] { "cantool", "--output" };
+	cmdargs_parser parser{ argc, argv };
+
+	EXPECT_FALSE(parser.valid());
 }
 
 // When no output interface is specified, use the default
