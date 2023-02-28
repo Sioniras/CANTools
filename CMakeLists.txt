@@ -18,6 +18,10 @@ set(SOURCES_INTERFACES
 	# Generic CAN Interface
 	source/interfaces/include/ICANInterface.h
 
+	# Interface factory
+	source/interfaces/include/connection_factory.h
+	source/interfaces/src/connection_factory.cpp
+
 	# CAN Socket
 	source/interfaces/include/CANSocket.h
 	source/interfaces/src/CANSocket.cpp
