@@ -31,15 +31,15 @@ namespace can::interfaces
 			~CANSocket();
 
 			// Public methods
-			bool Connect(const std::string& interfaceName);
-			void Disconnect();
-			void SetTimeout(int timeout);
-			void SetBlockingMode(bool blocking);
-			constexpr bool IsReady() const;
 			constexpr bool InterfaceIsAny() const;
 
 			// ICANInterface interface
 			bool SendMessage(const can::Message &message) override;
 			bool RequestMessage(can::Message &message) override;
+			bool Connect(const std::string& interfaceName) override;
+			void Disconnect() override;
+			void SetTimeout(int timeout) override;
+			void SetBlockingMode(bool blocking) override;
+			bool IsReady() const override;
 	};
 }

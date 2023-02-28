@@ -135,7 +135,7 @@ void can::interfaces::CANSocket::SetBlockingMode(bool blocking)
 }
 
 // Checks whether the CAN socket is open and valid
-constexpr bool can::interfaces::CANSocket::IsReady() const
+bool can::interfaces::CANSocket::IsReady() const
 {
 	return (_socket > 0);
 }
