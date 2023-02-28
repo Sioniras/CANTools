@@ -1,6 +1,6 @@
 #include <iostream>
-#include <memory>
-#include <interfaces/include/CANSocket.h>
+#include <interfaces/include/connection_factory.h>
+#include <utility/include/cmdargs_parser.h>
 
 /*
 For testing:
@@ -8,10 +8,12 @@ sudo ip link add dev vcan0 type vcan
 sudo ifconfig vcan0 up
 */
 
-int main()
+int main(int argc, const char** argv)
 {
-	auto interface = std::make_unique<can::interfaces::CANSocket>();
-	interface->Connect("vcan0");
+	utility::cmdargs_parser args{ argc, argv };
+
+	auto interface = can::interfaces::connection_factory::create(args.get(utility::cmdargs_parser::values::input_interface_type));
+	interface->Connect(args.get(utility::cmdargs_parser::values::input_interface_name));
 	interface->SetBlockingMode(false);
 	can_frame frame;
 	frame.can_id = 0x182;
