@@ -49,6 +49,15 @@ class cmdargs_parser
 			if(v != _values.end())
 				return v->second;
 
+			switch(parameter)
+			{
+				case values::input_interface_name:
+				case values::output_interface_name:
+					return "any";
+				default:
+					break;
+			}
+
 			return "can";
 		}
 		bool valid() const { return true; }
@@ -67,14 +76,30 @@ TEST(cmdargs_parser, construction_empty_cmdline_args)
 	EXPECT_TRUE(parser.valid());
 }
 
-TEST(cmdargs_parser, specify_input_interface)
+TEST(cmdargs_parser, specify_input_interface_with_default_name)
 {
 	const std::string input = "can";
+	const std::string interface_name = "any";
 	const int argc = 3;
 	const char* argv[argc] { "cantool", "--input", input.c_str() };
 	cmdargs_parser parser{ argc, argv };
 
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_type).c_str(), input.c_str());
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_name).c_str(), interface_name.c_str());
+	EXPECT_TRUE(parser.valid());
+}
+
+// When no input interface is specified, use the default
+TEST(cmdargs_parser, use_default_input_interface)
+{
+	const std::string input = "can";
+	const std::string interface_name = "any";
+	const int argc = 1;
+	const char* argv[argc] { "cantool" };
+	cmdargs_parser parser{ argc, argv };
+
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_type).c_str(), input.c_str());
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::input_interface_name).c_str(), interface_name.c_str());
 	EXPECT_TRUE(parser.valid());
 }
 
@@ -105,14 +130,30 @@ TEST(cmdargs_parser, specify_input_interface_type_and_name2)
 	EXPECT_TRUE(parser.valid());
 }
 
-TEST(cmdargs_parser, specify_output_interface)
+TEST(cmdargs_parser, specify_output_interface_with_default_name)
 {
 	const std::string output = "can";
+	const std::string interface_name = "any";
 	const int argc = 3;
 	const char* argv[argc] { "cantool", "--output", output.c_str() };
 	cmdargs_parser parser{ argc, argv };
 
 	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_type).c_str(), output.c_str());
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_name).c_str(), interface_name.c_str());
+	EXPECT_TRUE(parser.valid());
+}
+
+// When no output interface is specified, use the default
+TEST(cmdargs_parser, use_default_output_interface)
+{
+	const std::string output = "can";
+	const std::string interface_name = "any";
+	const int argc = 1;
+	const char* argv[argc] { "cantool" };
+	cmdargs_parser parser{ argc, argv };
+
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_type).c_str(), output.c_str());
+	EXPECT_STREQ(parser.get(cmdargs_parser::values::output_interface_name).c_str(), interface_name.c_str());
 	EXPECT_TRUE(parser.valid());
 }
 
