@@ -36,11 +36,23 @@ set(SOURCES_CAN_UTILITY
 )
 
 # -------------------------------------------------
+# Other utilities
+# -------------------------------------------------
+set(SOURCES_UTILITY
+	# Commandline arguments parser
+	source/utility/include/cmdargs_parser.h
+	source/utility/src/cmdargs_parser.cpp
+)
+
+# -------------------------------------------------
 # Sources for targets
 # -------------------------------------------------
 set(SOURCES_TARGET_CANLIB
 	${SOURCES_INTERFACES}
 	${SOURCES_CAN_UTILITY}
+
+	# Include the utilities here, although they are not directly CAN-related
+	${SOURCES_UTILITY}
 )
 
 set(SOURCES_TARGET_CANTOOL
